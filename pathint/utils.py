@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # Copyright (c) 2017 Ben Poole & Friedemann Zenke
 # MIT License -- see LICENSE for details
-# 
+#
 # This file is part of the code to reproduce the core results of:
 # Zenke, F., Poole, B., and Ganguli, S. (2017). Continual Learning Through
 # Synaptic Intelligence. In Proceedings of the 34th International Conference on
@@ -79,7 +79,7 @@ def extract_weight_changes(weights, update_ops):
 
 
 def compute_updates(opt, loss, weights):
-    update_ops = opt.get_updates(weights, [], loss)
+    update_ops = opt.get_updates(weights, loss)
     deltas, new_update_op = extract_weight_changes(weights, update_ops)
     grads = tf.gradients(loss, weights)
     # Make sure  that deltas are computed _before_ the weight is updated
@@ -145,8 +145,8 @@ def get_mnist_variations(dsetnames=['MNIST_Rotated', 'MNIST_Basic'], datashape=(
         'MNIST_Noise1',
         'MNIST_Noise2',
         'MNIST_Noise3',
-        'MNIST_Noise4', 
-        'MNIST_Noise5', 
+        'MNIST_Noise4',
+        'MNIST_Noise5',
         'MNIST_Noise6' ]
 
     args:
@@ -156,7 +156,7 @@ def get_mnist_variations(dsetnames=['MNIST_Rotated', 'MNIST_Basic'], datashape=(
         multihead: whether to generate a multihead dataset or a single head one
 
     returns:
-        doublet of training and validation set each being a list of tasks consisting of (X,y) tuples 
+        doublet of training and validation set each being a list of tasks consisting of (X,y) tuples
     """
 
     from skdata import larochelle_etal_2007 as L2007
@@ -265,7 +265,7 @@ def construct_transfer_cifar10_cifar100(nb_tasks=4, split='train'):
     classes from the CIFAR100 dataset.
 
     params:
-        nb_tasks The total number of tasks 
+        nb_tasks The total number of tasks
         split Whether to return training or validation data
 
     returns:
@@ -336,7 +336,7 @@ def construct_split_cifar100(num_tasks=3, num_classes=10):
     # split dataset by labels
     # here we also flatten the labels of cifar100 to match num_classes via modulus operation
     task_labels = [ range(num_classes*i,num_classes*(i+1)) for i in range(num_tasks) ]
-    datasets = [] 
+    datasets = []
     for labels in task_labels:
         idx = np.in1d(y, labels)
         data = X[idx], np_utils.to_categorical(y[idx]%num_classes, num_classes)
@@ -493,7 +493,7 @@ def online_benchmark(datasets, model, loss, optimizer, epochs_per_dataset=1,
 def save_zipped_pickle(obj, filename, protocol=-1):
     with gzip.open(filename, 'wb') as f:
         pickle.dump(obj, f, protocol)
-        
+
 
 def load_zipped_pickle(filename):
     try:
@@ -506,11 +506,11 @@ def load_zipped_pickle(filename):
 
 
 def split_dataset(ds, split_sizes, permute_data=True):
-    """ Helper function to split a single dataset into train, valid and test set. 
-    
+    """ Helper function to split a single dataset into train, valid and test set.
+
     args:
         ds the dataset being a tuple of (data,labels)
-        split_sizes a list of fractional split sizes of howto divide up the dataset 
+        split_sizes a list of fractional split sizes of howto divide up the dataset
 
     returns:
         a list of datasets with the respective split ratios
@@ -525,7 +525,7 @@ def split_dataset(ds, split_sizes, permute_data=True):
         data = raw_data
         labels = raw_labels
     nelems = len(labels)
-    nbegin = 0 
+    nbegin = 0
     splits = []
     for split in split_sizes:
         nend = nbegin+int(split*nelems)
@@ -560,7 +560,7 @@ def mk_joined_dataset( full_datasets, split_fractions = (0.9, 0.1) ):
 
 
 def main():
-    """ Test code for permute MNIST task 
+    """ Test code for permute MNIST task
 
     Plots the first digit of the first two tasks. """
     import matplotlib.pyplot as plt
@@ -573,4 +573,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
